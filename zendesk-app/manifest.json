@@ -1,0 +1,17 @@
+{
+  "name": "hw-update-stripe-card",
+  "author": {
+    "name": "Thomas Faller",
+    "email": "thomas.faller@healthwave.ie",
+    "url": "https://github.com/thomasfaller"
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "user_sidebar": "http://localhost:4242/"
+    }
+  },
+  "version": "1.0",
+  "frameworkVersion": "2.0"
+}
