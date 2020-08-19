@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon ./server/app.js",
+    "server": "nodemon -r dotenv/config ./server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/thomasfaller/zd-update-stripe-card/issues"
   },
-  "homepage": "https://github.com/thomasfaller/zd-update-stripe-card#readme"
+  "homepage": "https://github.com/thomasfaller/zd-update-stripe-card#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  }
 }

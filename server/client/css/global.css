@@ -42,7 +42,7 @@ body {
   justify-content: center;
   height: 100%;
   align-self: center;
-  padding: 50px 50px 75px 50px;
+  /* padding: 50px 50px 75px 50px; */
   background: var(--body-color);
   width: var(--form-width);
   border-radius: var(--radius);

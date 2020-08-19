@@ -1,3 +1,16 @@
+const client = ZAFClient.init();
+
+client.get("user.customField:stripe_id").then((data) => {
+  const stripeId = data["user.customField:stripe_id"];
+  if (stripeId.length > 0) {
+    document.getElementById("email").value = stripeId;
+    document.getElementById("details").innerText = `Stripe ID`;
+  } else {
+    document.getElementById("submit").disabled = true;
+    document.getElementById("submit").innerText = `no Stripe ID present`;
+  }
+});
+
 const stripeElements = (publicKey, setupIntent) => {
   const stripe = Stripe(publicKey);
   const elements = stripe.elements();
@@ -36,7 +49,7 @@ const stripeElements = (publicKey, setupIntent) => {
   button.addEventListener("click", (event) => {
     event.preventDefault();
     changeLoadingState(true);
-    const email = document.getElementById("email").value;
+    const stripeId = document.getElementById("email").value;
 
     stripe
       .confirmCardSetup(setupIntent.client_secret, {
@@ -58,12 +71,13 @@ const stripeElements = (publicKey, setupIntent) => {
   });
 };
 
-const getSetupIntent = (publicKey) => {
+const getSetupIntent = (publicKey, stripeId = "") => {
   return fetch("/create-setup-intent", {
     method: "post",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(stripeId !== "" ? { stripeId } : {}),
   })
     .then((response) => {
       return response.json();
@@ -84,7 +98,10 @@ const getPublicKey = () => {
       return response.json();
     })
     .then((response) => {
-      getSetupIntent(response.publicKey);
+      client.get("user.customField:stripe_id").then((data) => {
+        const stripeId = data["user.customField:stripe_id"];
+        getSetupIntent(response.publicKey, stripeId);
+      });
     });
 };
 
@@ -104,6 +121,7 @@ const changeLoadingState = (isLoading) => {
 /* Shows a success / error message when the payment is complete */
 const orderComplete = (stripe, clientSecret) => {
   stripe.retrieveSetupIntent(clientSecret).then((result) => {
+    client.invoke("notify", "Card added to Stripe!");
     const setupIntent = result.setupIntent;
     const setupIntentJson = JSON.stringify(setupIntent, null, 2);
 

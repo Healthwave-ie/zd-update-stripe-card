@@ -1,5 +1,5 @@
 {
-  "name": "hw-update-stripe-card",
+  "name": "Stripe Card Update",
   "author": {
     "name": "Thomas Faller",
     "email": "thomas.faller@healthwave.ie",
@@ -9,7 +9,12 @@
   "private": true,
   "location": {
     "support": {
-      "user_sidebar": "http://localhost:4242/"
+      "user_sidebar": {
+        "url": "http://localhost:4242",
+        "size": {
+          "height": "300px"
+        }
+      }
     }
   },
   "version": "1.0",

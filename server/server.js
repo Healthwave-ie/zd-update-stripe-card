@@ -1,21 +1,16 @@
 const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
 const app = express();
-const { resolve } = require("path");
-// Copy the .env.example in the root into a .env file in this folder
-require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const appPage = path.resolve(`${__dirname}/client/index.html`);
 
-try {
-  app.use(express.static(process.env.STATIC_DIR));
-} catch (e) {
-  console.log("Missing env file, be sure to copy .env.example to .env");
-}
-
+app.use(cookieParser());
 app.use(
   express.json({
     // We need the raw body to verify webhook signatures.
     // Let's compute it only when hitting the Stripe webhook endpoint.
-    verify: function (req, res, buf) {
+    verify: (req, res, buf) => {
       if (req.originalUrl.startsWith("/webhook")) {
         req.rawBody = buf.toString();
       }
@@ -23,9 +18,18 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
-  const path = resolve(process.env.STATIC_DIR + "/index.html");
-  res.sendFile(path);
+// app.use(express.static(`${__dirname}/client/`));
+
+app.get("/", async (req, res) => {
+  const queryString = req.originalUrl; // We need to retrieve this to use ZAF server-side
+  res.cookie(`zaf_params`, queryString);
+  res.redirect(`/app${queryString}`);
+});
+
+app.use(express.static(path.join(__dirname, "client")));
+
+app.get("/app", async (req, res) => {
+  res.sendFile(appPage);
 });
 
 app.get("/public-key", (req, res) => {
@@ -33,13 +37,11 @@ app.get("/public-key", (req, res) => {
 });
 
 app.post("/create-setup-intent", async (req, res) => {
-  // Create or use an existing Customer to associate with the SetupIntent.
-  // The PaymentMethod will be stored to this Customer for later use.
-  const customer = await stripe.customers.create();
+  const { stripeId } = req.body;
 
   res.send(
     await stripe.setupIntents.create({
-      customer: customer.id,
+      customer: stripeId,
     })
   );
 });
