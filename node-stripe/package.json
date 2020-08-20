@@ -1,0 +1,22 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "description": "Back-end for a Zendesk App allowing to add a card to a given Stripe customer.",
+    "repository": {
+        "url": "https://github.com/thomasfaller/zd-update-stripe-card"
+    },
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon -r dotenv/config index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "cookie-parser": "^1.4.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "morgan": "^1.10.0",
+        "stripe": "^8.84.0"
+    }
+}
