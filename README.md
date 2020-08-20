@@ -4,7 +4,7 @@ This a Zendesk Application build with NodeJs consisting of a back-end serving st
 
 ---
 
-## Dev :nerd_face:
+## Dev :computer:
 
 ### Node (back-end)
 

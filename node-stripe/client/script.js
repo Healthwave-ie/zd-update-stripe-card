@@ -1,28 +1,37 @@
 const client = ZAFClient.init();
+let userInStripe = false;
 const app = document.getElementById("app");
+const submitBtn = document.getElementById("submit");
 
-const refreshApp = () => {
-    client.get(["user.customField:stripe_id", "user.name"]).then((data) => {
-        const stripeId = data["user.customField:stripe_id"];
-        const userName = data["user.name"];
-        if (stripeId === null || stripeId === "") {
-            document.getElementById("submit").disabled = true;
-            document.getElementById("email").disabled = true;
-            const forms = document.getElementsByClassName("sr-form-row");
-            for (let i = 0; i < forms.length; i++) {
-                forms[i].style.display = "none";
+const initApp = () => {
+    client
+        .get([
+            "user.customField:stripe_id",
+            "user.name",
+            "user.phone",
+            "user.email",
+        ])
+        .then((data) => {
+            const stripeId = data["user.customField:stripe_id"];
+            const userName = data["user.name"];
+            const userPhone = data["user.phone"];
+            const userEmail = data["user.email"];
+            if (stripeId === null || stripeId === "") {
+                console.log(
+                    `no Stripe Id for ${userName}, phone: ${userPhone}, email: ${userEmail}`
+                );
+
+                submitBtn.innerText = `Create Customer in Stripe`;
+                submitBtn.style.backgroundColor = "#008cdd";
+            } else {
+                userInStripe = true;
+                document.getElementById("email").value = stripeId;
+                document.getElementById("details").innerText = `Stripe ID`;
+                document.getElementById(
+                    "button-text"
+                ).innerText = `Add card to ${userName}'s profile`;
             }
-            document.getElementById(
-                "submit"
-            ).innerText = `no Stripe ID present`;
-        } else {
-            document.getElementById("email").value = stripeId;
-            document.getElementById("details").innerText = `Stripe ID`;
-            document.getElementById(
-                "button-text"
-            ).innerText = `Add card to ${userName}'s profile`;
-        }
-    });
+        });
 };
 
 client.on("user.stripe_id.changed", () => {
@@ -62,7 +71,6 @@ const stripeElements = (publicKey, setupIntent) => {
         el.classList.remove("focused");
     });
 
-    // Handle payment submission when user clicks the pay button.
     const button = document.getElementById("submit");
     button.addEventListener("click", (event) => {
         event.preventDefault();
@@ -103,6 +111,20 @@ const getSetupIntent = (publicKey, stripeId = "") => {
         .then((setupIntent) => {
             stripeElements(publicKey, setupIntent);
         });
+};
+
+const createNewCustomer = (name, email, phone) => {
+    return fetch("/create-customer", {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, phone }),
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then(() => {});
 };
 
 const getPublicKey = () => {
@@ -154,5 +176,4 @@ const orderComplete = (stripe, clientSecret) => {
     });
 };
 
-refreshApp();
-getPublicKey();
+initApp();
