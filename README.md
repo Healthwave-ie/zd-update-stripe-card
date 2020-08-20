@@ -10,7 +10,7 @@ This a Zendesk Application build with NodeJs consisting of a back-end serving st
 
 To launch the app locally, you can start up the Node application
 
-```
+```shell
 $ cd node-stripe
 $ node -r dotenv/config index.js
 ```
@@ -19,7 +19,7 @@ Note that here, you need to include the dotenv config in order to utlize Stripe 
 
 You can also use Docker :whale2:
 
-```
+```shell
 $ cd node-stripe
 $ docker build -t zd-update-stripe-card . // this is only needed once
 $ docker container run -it -p 4242:4242 --env-file=.env zd-update-stripe-card
@@ -36,13 +36,11 @@ To lauch the Ruby server that allows to locally test a Zendesk app, you must ins
 
 Once all is installed you can do
 
-```
+```shell
 $ cd zendesk-app
 $ zat server
 ```
 
 Then you can open zendesk in your browser, navigate to a user profile (the app is configured to display only in the `user_sidebar` since it's utilizing data only available there) and append your url with <span style="color:lime;">_?zat=true_</span>
 
-```
-https://mydomain.zendesk.com/...../?zat=true
-```
+`https://mydomain.zendesk.com/...../?zat=true`
