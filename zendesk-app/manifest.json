@@ -1,22 +1,22 @@
 {
-  "name": "Stripe Card Update",
-  "author": {
-    "name": "Thomas Faller",
-    "email": "thomas.faller@healthwave.ie",
-    "url": "https://github.com/thomasfaller"
-  },
-  "defaultLocale": "en",
-  "private": true,
-  "location": {
-    "support": {
-      "user_sidebar": {
-        "url": "http://localhost:4242",
-        "size": {
-          "height": "300px"
+    "name": "Stripe Card Update",
+    "author": {
+        "name": "Thomas Faller",
+        "email": "thomas.faller@healthwave.ie",
+        "url": "https://github.com/thomasfaller"
+    },
+    "defaultLocale": "en",
+    "private": true,
+    "location": {
+        "support": {
+            "user_sidebar": {
+                "url": "http://localhost:4242",
+                "size": {
+                    "height": "270px"
+                }
+            }
         }
-      }
-    }
-  },
-  "version": "1.0",
-  "frameworkVersion": "2.0"
+    },
+    "version": "1.0",
+    "frameworkVersion": "2.0"
 }
